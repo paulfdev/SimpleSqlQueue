@@ -1,4 +1,4 @@
 SimpleSqlQueue
 ==============
 
-A simple queue implementation
+A simple queue implementation for SqlServer.

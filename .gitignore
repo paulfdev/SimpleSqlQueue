@@ -1,6 +1,17 @@
-# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
+*ReSharper.*
+*Resharper*.*
 bin
 obj
-
-# mstest test results
-TestResults
+run
+web
+*MSBuild.Community.Tasks.Targets
+*.suo
+StyleCop.Cache
+*.orig
+*.debug.css
+LessStyles.less.debug.css
+*.csproj.user
+*.DotSettings.*
+*Uploads*
+package
+output

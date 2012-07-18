@@ -36,6 +36,7 @@ namespace SimpleSqlQueue
 		{
 			while (_isRunning)
 			{
+				Thread.Sleep(100);
 				var item = _queue.Dequeue(_visibilityTimeout);
 				if (item != null)
 				{

@@ -45,7 +45,7 @@ namespace SimpleSqlQueue
 					}
 					catch (SqlException e)
 					{
-						//throw new QueueNotAvailableException(e);
+						throw new QueueUnavailableException(e.Message, e);
 					}
 				}
 			}
@@ -66,10 +66,12 @@ namespace SimpleSqlQueue
 							reader.Read();
 							if (reader.HasRows)
 							{
-								var queueItem = new QueueItem<T>(reader.GetGuid(0)) {FailedAttempts = reader.GetInt32(1)};
-								var byteArray = (byte[])reader[2];
-								queueItem.Payload = GetMessageFromBytes(byteArray);
-								queueItem.TimeStamp = reader.GetDateTime(3);
+								var queueItem =
+									new QueueItem<T>(
+										reader.GetGuid(0),
+										GetMessageFromBytes((byte[])reader[2]),
+										reader.GetInt32(1),
+										reader.GetDateTime(3));
 								transaction.Complete();
 								return queueItem;
 							}
@@ -82,7 +84,7 @@ namespace SimpleSqlQueue
 				}
 				catch (SqlException e)
 				{
-					//throw new QueueNotAvailableException(e);
+					throw new QueueUnavailableException(e.Message, e);
 				}
 			}
 			return default(QueueItem<T>);
@@ -108,7 +110,7 @@ namespace SimpleSqlQueue
 				}
 				catch (SqlException e)
 				{
-					//throw new QueueNotAvailableException(e);
+					throw new QueueUnavailableException(e.Message, e);
 				}
 			}
 		}
@@ -133,7 +135,7 @@ namespace SimpleSqlQueue
 				}
 				catch (SqlException e)
 				{
-					//throw new QueueNotAvailableException(e);
+					throw new QueueUnavailableException(e.Message, e);
 				}
 			}
 		}
@@ -160,7 +162,7 @@ namespace SimpleSqlQueue
 					}
 					catch (SqlException e)
 					{
-						//throw new QueueNotAvailableException(e);
+						throw new QueueUnavailableException(e.Message, e);
 					}
 				}
 			}

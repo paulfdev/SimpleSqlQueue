@@ -1,14 +1,20 @@
-﻿CREATE TABLE MessageQueue (
-  [MessageId] [uniqueidentifier] NOT NULL,
-  [FailedAttempts] [int] NOT NULL default(0),
-  [Payload] varbinary(max),
-  [TimeStamp] [datetime] NOT NULL);
-GO
-
-CREATE NONCLUSTERED INDEX [IX_MessageQueue] ON [dbo].[MessageQueue] 
+﻿CREATE TABLE [dbo].[MessageQueue](
+	[MessageId] [uniqueidentifier] NOT NULL,
+	[FailedAttempts] [int] NOT NULL,
+	[Payload] [varbinary](max) NOT NULL,
+	[TimeStamp] [datetime] NOT NULL,
+ CONSTRAINT [PK_MessageQueue] PRIMARY KEY CLUSTERED 
 (
 	[MessageId] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+ALTER TABLE [dbo].[MessageQueue] ADD  CONSTRAINT [DF__MessageQu__Faile__7E6CC920]  DEFAULT ((0)) FOR [FailedAttempts]
 GO
 
 
@@ -49,12 +55,20 @@ CREATE TABLE [dbo].[FailedMessageStore](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO
+
 CREATE CLUSTERED INDEX cdxFailedMessageQueue on FailedMessageStore (Id);
 GO
 
-CREATE TABLE MessageLog (
-  [FailedMessageId] [bigint] NOT NULL IDENTITY(1,1),
-  FailedReason nvarchar(max));
+CREATE TABLE [dbo].[MessageLog](
+	[FailedMessageId] [uniqueidentifier] NOT NULL,
+	[FailedReason] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_MessageLog] PRIMARY KEY CLUSTERED 
+(
+	[FailedMessageId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
 GO
 
 CREATE PROCEDURE DeleteQueueItem

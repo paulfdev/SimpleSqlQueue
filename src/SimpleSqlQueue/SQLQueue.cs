@@ -245,7 +245,7 @@ namespace SimpleSqlQueue
 
 		public static TransactionScope GetTransaction()
 		{
-			return new TransactionScope(TransactionScopeOption.Required,
+			return new TransactionScope(TransactionScopeOption.RequiresNew,
 										new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.ReadCommitted });
 		}
 
